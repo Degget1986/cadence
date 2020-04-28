@@ -3318,6 +3318,10 @@ func ConvertWord64(value Value, interpreter *Interpreter) Value {
 
 type Fix64Value int64
 
+const Fix64MaxValue = math.MaxInt64
+const Fix64MaxDivisorValue = sema.Fix64Factor * sema.Fix64Factor
+const Fix64MaxIntDividend = Fix64MaxValue / sema.Fix64Factor
+
 func init() {
 	gob.Register(Fix64Value(0))
 }
@@ -3449,9 +3453,19 @@ func (v Fix64Value) Mul(other NumberValue) NumberValue {
 	return Fix64Value(result)
 }
 
+func (v Fix64Value) Reciprocal() Fix64Value {
+	if v == 0 {
+		panic(DivisionByZeroError{})
+	}
+	return Fix64MaxDivisorValue / v
+}
+
 func (v Fix64Value) Div(other NumberValue) NumberValue {
-	// TODO:
-	panic("TODO")
+	o := other.(Fix64Value)
+	if o > Fix64MaxDivisorValue {
+		panic(OverflowError{})
+	}
+	return v.Mul(o.Reciprocal())
 }
 
 func (v Fix64Value) Mod(other NumberValue) NumberValue {
@@ -3482,8 +3496,6 @@ func (v Fix64Value) Equal(other Value) BoolValue {
 	}
 	return v == otherFix64
 }
-
-const Fix64MaxValue = math.MaxInt64
 
 func ConvertFix64(value Value, interpreter *Interpreter) Value {
 	switch value := value.(type) {
@@ -3528,17 +3540,21 @@ func ConvertFix64(value Value, interpreter *Interpreter) Value {
 
 type UFix64Value uint64
 
+const UFix64MaxValue = math.MaxUint64
+const UFix64MaxDivisorValue = sema.Fix64Factor * sema.Fix64Factor
+const UFix64MaxIntDividend = UFix64MaxValue / sema.Fix64Factor
+
 func init() {
 	gob.Register(UFix64Value(0))
 }
 
-func NewUFix64ValueWithInteger(integer uint64) Fix64Value {
+func NewUFix64ValueWithInteger(integer uint64) UFix64Value {
 
 	if integer > sema.UFix64TypeMaxInt {
 		panic(OverflowError{})
 	}
 
-	return Fix64Value(integer * sema.Fix64Factor)
+	return UFix64Value(integer * sema.Fix64Factor)
 }
 
 func (UFix64Value) IsValue() {}
@@ -3645,9 +3661,19 @@ func (v UFix64Value) Mul(other NumberValue) NumberValue {
 	return UFix64Value(result)
 }
 
+func (v UFix64Value) Reciprocal() UFix64Value {
+	if v == 0 {
+		panic(DivisionByZeroError{})
+	}
+	return UFix64MaxDivisorValue / v
+}
+
 func (v UFix64Value) Div(other NumberValue) NumberValue {
-	// TODO:
-	panic("TODO")
+	o := other.(UFix64Value)
+	if o > UFix64MaxDivisorValue {
+		panic(OverflowError{})
+	}
+	return v.Mul(o.Reciprocal())
 }
 
 func (v UFix64Value) Mod(other NumberValue) NumberValue {
