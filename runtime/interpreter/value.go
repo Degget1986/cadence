@@ -3469,8 +3469,11 @@ func (v Fix64Value) Div(other NumberValue) NumberValue {
 }
 
 func (v Fix64Value) Mod(other NumberValue) NumberValue {
-	// TODO:
-	panic("TODO")
+	o := other.(Fix64Value)
+	// v - int(v/o) * o
+	quotient := v.Div(o).(Fix64Value)
+	truncatedQuotient := (int64(quotient) / sema.Fix64Factor) * sema.Fix64Factor
+	return v.Minus(Fix64Value(truncatedQuotient).Mul(o))
 }
 
 func (v Fix64Value) Less(other NumberValue) BoolValue {
@@ -3677,8 +3680,11 @@ func (v UFix64Value) Div(other NumberValue) NumberValue {
 }
 
 func (v UFix64Value) Mod(other NumberValue) NumberValue {
-	// TODO:
-	panic("TODO")
+	o := other.(UFix64Value)
+	// v - int(v/o) * o
+	quotient := v.Div(o).(UFix64Value)
+	truncatedQuotient := (uint64(quotient) / sema.Fix64Factor) * sema.Fix64Factor
+	return v.Minus(UFix64Value(truncatedQuotient).Mul(o))
 }
 
 func (v UFix64Value) Less(other NumberValue) BoolValue {
