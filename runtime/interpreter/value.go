@@ -706,7 +706,7 @@ func (v IntValue) Mod(other NumberValue) NumberValue {
 	if o.BigInt.Cmp(res) == 0 {
 		panic(DivisionByZeroError{})
 	}
-	res.Mod(v.BigInt, o.BigInt)
+	res.Rem(v.BigInt, o.BigInt)
 	return IntValue{res}
 }
 
@@ -1561,7 +1561,7 @@ func (v Int128Value) Mod(other NumberValue) NumberValue {
 	if o.BigInt.Cmp(res) == 0 {
 		panic(DivisionByZeroError{})
 	}
-	res.Mod(v.BigInt, o.BigInt)
+	res.Rem(v.BigInt, o.BigInt)
 	return Int128Value{res}
 }
 
@@ -1769,7 +1769,7 @@ func (v Int256Value) Mod(other NumberValue) NumberValue {
 	if o.BigInt.Cmp(res) == 0 {
 		panic(DivisionByZeroError{})
 	}
-	res.Mod(v.BigInt, o.BigInt)
+	res.Rem(v.BigInt, o.BigInt)
 	return Int256Value{res}
 }
 
@@ -1960,7 +1960,7 @@ func (v UIntValue) Mod(other NumberValue) NumberValue {
 	if o.BigInt.Cmp(res) == 0 {
 		panic(DivisionByZeroError{})
 	}
-	res.Mod(v.BigInt, o.BigInt)
+	res.Rem(v.BigInt, o.BigInt)
 	return UIntValue{res}
 }
 
@@ -2666,7 +2666,7 @@ func (v UInt128Value) Mod(other NumberValue) NumberValue {
 	if o.BigInt.Cmp(res) == 0 {
 		panic(DivisionByZeroError{})
 	}
-	res.Mod(v.BigInt, o.BigInt)
+	res.Rem(v.BigInt, o.BigInt)
 	return UInt128Value{res}
 }
 
@@ -2844,7 +2844,7 @@ func (v UInt256Value) Mod(other NumberValue) NumberValue {
 	if o.BigInt.Cmp(res) == 0 {
 		panic(DivisionByZeroError{})
 	}
-	res.Mod(v.BigInt, o.BigInt)
+	res.Rem(v.BigInt, o.BigInt)
 	return UInt256Value{res}
 }
 
